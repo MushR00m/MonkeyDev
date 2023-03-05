@@ -347,7 +347,8 @@ addToFileIfMissing "$userBashProfileFile" "^(export)? *PATH=.*(\\\$MonkeyDevPath
 iosSdkPlatformPath=`getSdkProperty iphoneos PlatformPath`
 macosSdkPlatformPath=`getSdkProperty macosx PlatformPath`
 
-specificationFile=$(cd $iosSdkPlatformPath/../../.. && pwd)/PlugIns/IDEiOSSupportCore.ideplugin/Contents/Resources/Embedded-Device.xcspec
+#支持xcode14.2
+specificationFile=$(cd $iosSdkPlatformPath/../../.. && pwd)/PlugIns/XCBSpecifications.ideplugin/Contents/Resources/Embedded-Device.xcspec
 
 requireFile "$specificationFile" false
 
@@ -357,9 +358,11 @@ requireBackup "$specificationFile"
 hasPackageTypeForCommandLineTool=`doesFileContain "$specificationFile" 'com.apple.package-type.mach-o-executable'`
 hasProductTypeForCommandLineTool=`doesFileContain "$specificationFile" 'com.apple.product-type.tool'`
 
-macosxSDKSpecificationsPath=$macosSdkPlatformPath/Developer/Library/Xcode/Specifications
-packageTypesForMacOSXPath="$macosxSDKSpecificationsPath/MacOSX Package Types.xcspec"
-productTypesForMacOSXPath="$macosxSDKSpecificationsPath/MacOSX Product Types.xcspec"
+#修改支持xcode14.2
+ln -s "/Applications/Xcode.app/Contents/PlugIns/XCBSpecifications.ideplugin" "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/PrivatePlugIns/XCBSpecifications.ideplugin"
+macosxSDKSpecificationsPath=$macosSdkPlatformPath/Developer/Library/Xcode/PrivatePlugIns
+packageTypesForMacOSXPath="$macosxSDKSpecificationsPath/XCBSpecifications.ideplugin/Contents/Resources/MacOSX Package Types.xcspec"
+productTypesForMacOSXPath="$macosxSDKSpecificationsPath/XCBSpecifications.ideplugin/Contents/Resources/MacOSX Product Types.xcspec"
 
 requireFile "$packageTypesForMacOSXPath" false
 requireFile "$productTypesForMacOSXPath" false
